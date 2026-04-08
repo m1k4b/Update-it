@@ -22,58 +22,58 @@ with open(os.path.join(app_directory, "data.json"), "r") as f:
     data = json.load(f)
 
 while True:
-    print("\nVos Modpacks :")
+    print("\nYour Modpacks:")
 
     i = 1
     for modpack in data["modpacks"]:
-        print(f"{i}. {modpack['name']} | Contient: {', '.join([mod["name"] for mod in modpack['mods']])}")
+        print(f"{i}. {modpack['name']} | Contains: {', '.join([mod['name'] for mod in modpack['mods']])}")
         i += 1
 
     if i == 1:
-        print("Vos modpacks s'afficheront ici.\n")
+        print("Your modpacks will appear here.\n")
     else:
         print()
 
-    choice = int(input("Voulez vous en télécharger un ou en créer un ? 1 pour télécharger, 2 pour créer, 3 pour supprimer, 4 pour arrêter le programme. "))
+    choice = int(input("Do you want to download one or create one? 1 to download, 2 to create, 3 to delete, 4 to exit the program. "))
     if choice == 1:
-        modpack_index = int(input("Entrez le numéro du modpack : "))-1
+        modpack_index = int(input("Enter the modpack number: ")) - 1
         modpack_to_download = data["modpacks"][modpack_index]
-        version = input("Entrez la version : ")
-        print("Téléchargement en cours, veuillez patienter...")
+        version = input("Enter the version: ")
+        print("Downloading, please wait...")
         for mod in modpack_to_download["mods"]:
-            status_bool,related_data = fast_download_mod(mod["name"],version,"fabric")
+            status_bool, related_data = fast_download_mod(mod["name"], version, "fabric")
             if not status_bool:
                 status_to_msg = {
-                    "versionNotSupported":f"la version {version} n'est pas supportée.",
-                    "loaderNotSupported":f"le loader Fabric n'est pas supporté.",
-                    "notFound":f"une erreur inconnue s'est produite. Veuillez réessayer plus tard."
+                    "versionNotSupported": f"version {version} is not supported.",
+                    "loaderNotSupported": f"Fabric loader is not supported.",
+                    "notFound": f"an unknown error occurred. Please try again later."
                 }
-                print(f"Erreur lors du téléchargement de {mod["name"]} : {status_to_msg[related_data]}")
+                print(f"Error while downloading {mod['name']}: {status_to_msg[related_data]}")
             else:
-                print(f"Téléchargement réussi de {mod["name"]} ! Enregistré à la location \"{related_data}\".")
+                print(f"Successfully downloaded {mod['name']}! Saved at \"{related_data}\".")
 
-        print("Téléchargement terminé !")
-        data["modpacks"][modpack_index]["downloads"]+=1
+        print("Download completed!")
+        data["modpacks"][modpack_index]["downloads"] += 1
         save()
-    elif choice==2:
+    elif choice == 2:
         mods = []
-        modpack_name = input("Entrez le nom du nouveau modpack : ")
+        modpack_name = input("Enter the name of the new modpack: ")
         while True:
-            mod_name = input("Entrez le nom d'un mod que vous voulez ajouter (s pour terminer) : ")
-            if mod_name=="s":
+            mod_name = input("Enter the name of a mod you want to add (type 's' to finish): ")
+            if mod_name == "s":
                 break
             mods.append({
-                "name":mod_name
+                "name": mod_name
             })
         data["modpacks"].append({
             "name": modpack_name,
             "mods": mods,
-            "downloads":0
+            "downloads": 0
         })
         save()
-    elif choice==3:
-        modpack_index = int(input("Entrez le numéro du modpack : ")) - 1
+    elif choice == 3:
+        modpack_index = int(input("Enter the modpack number: ")) - 1
         data["modpacks"].pop(modpack_index)
         save()
-    elif choice==4:
+    elif choice == 4:
         sys.exit()
