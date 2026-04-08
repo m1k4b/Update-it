@@ -7,4 +7,4 @@ You can create modpacks and add mods to them. Then, you can easily download them
 
 
 # How to install?
-Run `pip install requirements.txt`, then run the program console_app.py, which needs to be in the same directory as tools.py.
+Run `pip install -r requirements.txt`, then run the program console_app.py, which needs to be in the same directory as tools.py.
